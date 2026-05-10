@@ -1,7 +1,7 @@
 # Popcorn
 
 <p align="center">
-  <img src="app/src/main/res/drawable-nodpi/tv_banner.png" alt="Popcorn Android TV banner" width="520">
+  <img src="app/src/main/res/mipmap-xxxhdpi/popcorn_tv_banner.png" alt="Popcorn Android TV banner" width="640">
 </p>
 
 <p align="center">
@@ -32,6 +32,16 @@ This project is also an experiment in AI-native software development. The applic
 - Local Room cache for catalogs, favorites, playback progress, and user library state.
 - Media3/ExoPlayer playback with HLS support.
 - A dark, glassy, TV-scale interface built with Jetpack Compose.
+
+## Brand Assets
+
+Popcorn ships with refreshed launcher and TV artwork for Android TV and Fire TV:
+
+- Android TV banner: `app/src/main/res/drawable-nodpi/tv_banner.png`
+- High-resolution banner copies: `app/src/main/res/mipmap-*/popcorn_tv_banner.png`
+- Launcher icon: `app/src/main/res/mipmap-*/ic_launcher.png`
+- Round launcher icon: `app/src/main/res/mipmap-*/ic_launcher_round.png`
+- Source foreground artwork: `app/src/main/res/drawable/popcorn_logo_foreground.png`
 
 ## Tech Stack
 
