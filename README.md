@@ -1,7 +1,7 @@
 # Popcorn
 
 <p align="center">
-  <img src="app/src/main/res/drawable-nodpi/tv_banner.png" alt="Popcorn Android TV banner" width="520">
+  <img src="app/src/main/res/mipmap-xxxhdpi/popcorn_tv_banner.png" alt="Popcorn Android TV banner with neon logo artwork" width="640">
 </p>
 
 <p align="center">
