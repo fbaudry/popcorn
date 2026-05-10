@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <View
+        android:id="@id/exo_controls_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/exo_black_opacity_60" />
+
+    <LinearLayout
+        android:id="@id/exo_center_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:clipToPadding="false"
+        android:gravity="center"
+        android:layoutDirection="ltr"
+        android:padding="@dimen/exo_styled_controls_padding">
+
+        <ImageButton
+            android:id="@+id/popcorn_channel_previous"
+            style="@style/ExoStyledControls.Button.Center.Previous"
+            android:contentDescription="@string/player_previous_channel" />
+
+        <ImageButton
+            android:id="@id/exo_play_pause"
+            style="@style/ExoStyledControls.Button.Center.PlayPause" />
+
+        <ImageButton
+            android:id="@+id/popcorn_channel_next"
+            style="@style/ExoStyledControls.Button.Center.Next"
+            android:contentDescription="@string/player_next_channel" />
+
+    </LinearLayout>
+
+</merge>
