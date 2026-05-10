@@ -23,6 +23,16 @@ It is designed for personal Xtream-compatible subscriptions. The repository does
 
 This project is also an experiment in AI-native software development. The application was written entirely through AI assistance and prompts, without manually typing a single line of application code.
 
+## AI Agent Onboarding
+
+Start with [AGENTS.md](AGENTS.md) before making changes. It points to the current architecture, development workflow, validation commands, and project-specific rules for agentic work.
+
+Useful companion docs:
+
+- [docs/architecture.md](docs/architecture.md)
+- [docs/development.md](docs/development.md)
+- [DESIGN.md](DESIGN.md)
+
 ## Highlights
 
 - Live TV browsing with categories, search, favorites, and last-channel memory.
@@ -106,6 +116,12 @@ More detailed setup notes are available in [docs/deployment/firestick.md](docs/d
 
 ```bash
 ./gradlew :app:testDebugUnitTest
+```
+
+For the default agent/CI validation pass:
+
+```bash
+./scripts/check.sh
 ```
 
 ## Project Status
