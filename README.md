@@ -30,7 +30,7 @@ This project is also an experiment in AI-native software development. The applic
 - Movies and series catalogs with poster artwork, details, episode selection, and resume progress.
 - Fire TV friendly launcher assets, banner, and leanback support.
 - Local Room cache for catalogs, favorites, playback progress, and user library state.
-- Media3/ExoPlayer playback with HLS support and fallback URL handling.
+- Media3/ExoPlayer playback with HLS support.
 - A dark, glassy, TV-scale interface built with Jetpack Compose.
 
 ## Tech Stack
@@ -54,13 +54,9 @@ This project is also an experiment in AI-native software development. The applic
 
 ## Configuration
 
-Create a local `.env` file from the example:
+Popcorn no longer requires Xtream credentials at build time. Build and install the APK, then enter your Xtream base URL, username, and password on the first launch screen.
 
-```bash
-cp .env.example .env
-```
-
-Then fill in your own credentials:
+`.env.example` remains as local documentation for the expected values:
 
 ```env
 XTREAM_BASE_URL=https://example.com:8080
@@ -68,7 +64,7 @@ XTREAM_USERNAME=username
 XTREAM_PASSWORD=password
 ```
 
-`.env` and `.env.*` files are intentionally ignored by Git so private credentials stay local. Keep `.env.example` as documentation only.
+`.env` and `.env.*` files are intentionally ignored by Git. They are optional and are not read by the Android build.
 
 ## Build
 

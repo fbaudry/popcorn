@@ -11,10 +11,12 @@ import com.popcorn.live.xtream.XtreamSeriesInfoDto
 import com.popcorn.live.xtream.XtreamSeriesInfoResponseDto
 import com.popcorn.live.xtream.XtreamVodInfoResponseDto
 import com.popcorn.live.xtream.XtreamVodStreamDto
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 
 class MediaCatalogRepositoryTest {
@@ -134,6 +136,26 @@ class MediaCatalogRepositoryTest {
         assertEquals("ep-1", details.episodes.single().id)
         assertEquals("Pilot", details.episodes.single().title)
     }
+
+    @Test
+    fun refreshCancellationIsRethrownAndDoesNotPersistError() = runTest {
+        val store = FakeMediaCatalogStore().apply {
+            movieMetadata.value = CatalogMetadata(lastSuccessfulRefreshAt = 42L)
+        }
+        val repository = MediaCatalogRepository(
+            api = CancellingMediaXtreamApi(),
+            store = store,
+        )
+
+        try {
+            repository.refresh(MediaKind.Movies)
+            fail("Expected CancellationException")
+        } catch (cancellation: CancellationException) {
+            assertEquals("cancelled", cancellation.message)
+        }
+
+        assertEquals(CatalogMetadata(lastSuccessfulRefreshAt = 42L), store.movieMetadata.value)
+    }
 }
 
 private class FakeMediaCatalogStore : MediaCatalogStore {
@@ -203,4 +225,16 @@ private class FakeMediaXtreamApi(
     override suspend fun seriesCategories(): List<XtreamMediaCategoryDto> = seriesCategories
     override suspend fun series(categoryId: String?): List<XtreamSeriesDto> = series
     override suspend fun seriesInfo(seriesId: Int): XtreamSeriesInfoResponseDto = seriesInfo
+}
+
+private class CancellingMediaXtreamApi : XtreamApi {
+    override suspend fun account(): XtreamAccountResponseDto = XtreamAccountResponseDto()
+    override suspend fun liveCategories(): List<XtreamLiveCategoryDto> = emptyList()
+    override suspend fun liveStreams(categoryId: String?): List<XtreamLiveStreamDto> = emptyList()
+    override suspend fun vodCategories(): List<XtreamMediaCategoryDto> = throw CancellationException("cancelled")
+    override suspend fun vodStreams(categoryId: String?): List<XtreamVodStreamDto> = emptyList()
+    override suspend fun vodInfo(vodId: Int): XtreamVodInfoResponseDto = XtreamVodInfoResponseDto()
+    override suspend fun seriesCategories(): List<XtreamMediaCategoryDto> = emptyList()
+    override suspend fun series(categoryId: String?): List<XtreamSeriesDto> = emptyList()
+    override suspend fun seriesInfo(seriesId: Int): XtreamSeriesInfoResponseDto = XtreamSeriesInfoResponseDto()
 }

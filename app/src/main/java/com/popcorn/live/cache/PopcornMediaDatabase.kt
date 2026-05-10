@@ -12,7 +12,7 @@ import androidx.room.RoomDatabase
         MediaMetadataEntity::class,
     ],
     version = 1,
-    exportSchema = false,
+    exportSchema = true,
 )
 abstract class PopcornMediaDatabase : RoomDatabase() {
     abstract fun mediaCatalogDao(): MediaCatalogDao

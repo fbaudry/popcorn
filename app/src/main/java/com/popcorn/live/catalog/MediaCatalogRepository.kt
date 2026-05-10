@@ -2,6 +2,7 @@ package com.popcorn.live.catalog
 
 import com.popcorn.live.xtream.XtreamApi
 import com.popcorn.live.xtream.XtreamNormalizer
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 
 interface MediaCatalogStore {
@@ -31,7 +32,7 @@ class MediaCatalogRepository(
     fun metadata(kind: MediaKind): Flow<CatalogMetadata> = store.metadata(kind)
 
     suspend fun refresh(kind: MediaKind): RefreshResult {
-        return runCatching {
+        return try {
             val categories = when (kind) {
                 MediaKind.Movies -> XtreamNormalizer.mediaCategories(api.vodCategories(), kind)
                 MediaKind.Series -> XtreamNormalizer.mediaCategories(api.seriesCategories(), kind)
@@ -50,7 +51,9 @@ class MediaCatalogRepository(
             )
 
             RefreshResult.Success(refreshedAtMillis)
-        }.getOrElse { throwable ->
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (throwable: Throwable) {
             val message = throwable.message
                 ?.takeIf(String::isNotBlank)
                 ?: "Xtream media refresh failed"

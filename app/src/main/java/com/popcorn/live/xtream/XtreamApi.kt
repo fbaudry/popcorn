@@ -1,6 +1,7 @@
 package com.popcorn.live.xtream
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
@@ -22,6 +23,7 @@ class OkHttpXtreamApi(
     private val urlFactory: XtreamUrlFactory,
     private val client: OkHttpClient,
     private val json: Json = Json { ignoreUnknownKeys = true },
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : XtreamApi {
     override suspend fun account(): XtreamAccountResponseDto =
         getJson(urlFactory.accountInfoUrl())
@@ -50,7 +52,7 @@ class OkHttpXtreamApi(
     override suspend fun seriesInfo(seriesId: Int): XtreamSeriesInfoResponseDto =
         getJson(urlFactory.seriesInfoUrl(seriesId))
 
-    private suspend inline fun <reified T> getJson(url: String): T = withContext(Dispatchers.IO) {
+    private suspend inline fun <reified T> getJson(url: String): T = withContext(ioDispatcher) {
         val request = Request.Builder().url(url).get().build()
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) {

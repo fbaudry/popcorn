@@ -8,13 +8,7 @@ From the repository root:
 ./gradlew :app:assembleDebug
 ```
 
-Edit `.env` with the real Xtream values before building an APK for your Firestick:
-
-```env
-XTREAM_BASE_URL=https://example.com:8080
-XTREAM_USERNAME=username
-XTREAM_PASSWORD=password
-```
+Xtream credentials are not required during the build. Popcorn asks for the server URL, username, and password on first launch.
 
 The debug APK is created at:
 
@@ -50,6 +44,8 @@ Accept the debug prompt on the Firestick during the first connection. The `-r` f
 ## Launch Popcorn
 
 Open `Settings > Applications > Manage Installed Applications > Popcorn > Launch application`.
+
+On first launch, fill in the Xtream connection form. The values are stored locally on the device and reused on later launches.
 
 ## Clean Reinstall
 

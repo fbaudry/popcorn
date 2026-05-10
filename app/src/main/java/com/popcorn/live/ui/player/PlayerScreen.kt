@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.compose.BackHandler
+import androidx.annotation.OptIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,6 +39,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.BehindLiveWindowException
@@ -64,6 +66,7 @@ data class LiveChannelControls(
 )
 
 @Composable
+@OptIn(UnstableApi::class)
 fun PlayerScreen(
     content: PlayerContent,
     urls: PlaybackUrls,
@@ -75,7 +78,6 @@ fun PlayerScreen(
     BackHandler(onBack = onBack)
 
     val context = LocalContext.current
-    var usingFallback by remember(content.key) { mutableStateOf(false) }
     var errorMessage by remember(content.key) { mutableStateOf<String?>(null) }
     val controlsVisibleState = remember { mutableStateOf(true) }
     val controlsVisible by controlsVisibleState
@@ -99,18 +101,7 @@ fun PlayerScreen(
                     return
                 }
 
-                if (!usingFallback && urls.fallback != urls.preferred) {
-                    usingFallback = true
-                    errorMessage = null
-                    player.setMediaItem(
-                        MediaItem.fromUri(urls.fallback),
-                        player.currentPosition.coerceAtLeast(startPositionMillis),
-                    )
-                    player.prepare()
-                    player.playWhenReady = true
-                } else {
-                    errorMessage = "Flux illisible"
-                }
+                errorMessage = "Flux illisible"
             }
         }
 
@@ -122,12 +113,11 @@ fun PlayerScreen(
         }
     }
 
-    LaunchedEffect(content.key, urls.preferred, startPositionMillis) {
-        usingFallback = false
+    LaunchedEffect(content.key, urls.url, startPositionMillis) {
         errorMessage = null
         controlsVisibleState.value = true
         player.setMediaItem(
-            MediaItem.fromUri(urls.preferred),
+            MediaItem.fromUri(urls.url),
             startPositionMillis.coerceAtLeast(0L),
         )
         player.prepare()
@@ -194,6 +184,7 @@ fun PlayerScreen(
     }
 }
 
+@OptIn(UnstableApi::class)
 private fun PlayerView.syncControllerVisibility(controlsVisibleState: MutableState<Boolean>) {
     setControllerVisibilityListener(
         PlayerView.ControllerVisibilityListener { visibility ->

@@ -12,7 +12,7 @@ import androidx.room.RoomDatabase
         CatalogMetadataEntity::class,
     ],
     version = 1,
-    exportSchema = false,
+    exportSchema = true,
 )
 abstract class PopcornDatabase : RoomDatabase() {
     abstract fun liveCatalogDao(): LiveCatalogDao

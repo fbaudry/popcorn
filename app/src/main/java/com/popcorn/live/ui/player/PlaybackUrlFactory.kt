@@ -3,8 +3,7 @@ package com.popcorn.live.ui.player
 import com.popcorn.live.xtream.XtreamUrlFactory
 
 data class PlaybackUrls(
-    val preferred: String,
-    val fallback: String,
+    val url: String,
 )
 
 class PlaybackUrlFactory(
@@ -15,7 +14,7 @@ class PlaybackUrlFactory(
     fun liveUrlsFor(streamId: Int): PlaybackUrls {
         val hls = xtreamUrlFactory.hlsPlaybackUrl(streamId)
 
-        return PlaybackUrls(preferred = hls, fallback = hls)
+        return PlaybackUrls(url = hls)
     }
 
     fun movieUrlsFor(streamId: Int, extension: String?): PlaybackUrls {
@@ -23,7 +22,7 @@ class PlaybackUrlFactory(
             streamId = streamId,
             extension = extension.orEmpty(),
         )
-        return PlaybackUrls(preferred = playbackUrl, fallback = playbackUrl)
+        return PlaybackUrls(url = playbackUrl)
     }
 
     fun seriesUrlsFor(episodeId: String, extension: String?): PlaybackUrls {
@@ -31,6 +30,6 @@ class PlaybackUrlFactory(
             episodeId = episodeId,
             extension = extension.orEmpty(),
         )
-        return PlaybackUrls(preferred = playbackUrl, fallback = playbackUrl)
+        return PlaybackUrls(url = playbackUrl)
     }
 }

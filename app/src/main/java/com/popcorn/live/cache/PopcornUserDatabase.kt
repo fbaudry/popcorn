@@ -12,7 +12,7 @@ import androidx.room.RoomDatabase
         LastPlaybackEntity::class,
     ],
     version = 1,
-    exportSchema = false,
+    exportSchema = true,
 )
 abstract class PopcornUserDatabase : RoomDatabase() {
     abstract fun userLibraryDao(): UserLibraryDao

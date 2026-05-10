@@ -2,6 +2,7 @@ package com.popcorn.live.catalog
 
 import com.popcorn.live.xtream.XtreamApi
 import com.popcorn.live.xtream.XtreamNormalizer
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 
 data class CatalogMetadata(
@@ -38,7 +39,7 @@ class LiveCatalogRepository(
     val metadata: Flow<CatalogMetadata> = store.metadata
 
     suspend fun refresh(): RefreshResult {
-        return runCatching {
+        return try {
             val liveCategories = api.liveCategories()
             val categories = XtreamNormalizer.categories(liveCategories)
             val channels = XtreamNormalizer.channels(
@@ -54,7 +55,9 @@ class LiveCatalogRepository(
             )
 
             RefreshResult.Success(refreshedAtMillis)
-        }.getOrElse { throwable ->
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (throwable: Throwable) {
             val message = throwable.message
                 ?.takeIf(String::isNotBlank)
                 ?: "Xtream refresh failed"

@@ -41,9 +41,6 @@ class XtreamUrlFactory(
     fun hlsPlaybackUrl(streamId: Int): String =
         "$cleanBaseUrl/live/$encodedUsername/$encodedPassword/$streamId.m3u8"
 
-    fun tsPlaybackUrl(streamId: Int): String =
-        "$cleanBaseUrl/live/$encodedUsername/$encodedPassword/$streamId.ts"
-
     fun moviePlaybackUrl(streamId: Int, extension: String): String =
         "$cleanBaseUrl/movie/$encodedUsername/$encodedPassword/$streamId.${extension.toPathExtension()}"
 

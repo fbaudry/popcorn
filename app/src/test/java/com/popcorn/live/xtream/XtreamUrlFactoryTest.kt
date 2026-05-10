@@ -80,10 +80,6 @@ class XtreamUrlFactoryTest {
             "https://iptv.example.com:8080/live/Mike/1234/55555.m3u8",
             factory.hlsPlaybackUrl(streamId = 55555),
         )
-        assertEquals(
-            "https://iptv.example.com:8080/live/Mike/1234/55555.ts",
-            factory.tsPlaybackUrl(streamId = 55555),
-        )
     }
 
     @Test

@@ -1,33 +1,9 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
-
-fun readEnvFile(): Properties {
-    val envFile = rootProject.file(".env")
-    val properties = Properties()
-    if (envFile.exists()) {
-        envFile.inputStream().use(properties::load)
-    }
-    return properties
-}
-
-fun Properties.requiredEnv(name: String): String {
-    val value = getProperty(name)?.trim().orEmpty()
-    require(value.isNotBlank()) {
-        "Missing $name in .env. Copy .env.example to .env and set your Xtream value."
-    }
-    return value
-}
-
-fun String.asBuildConfigString(): String =
-    "\"${replace("\\", "\\\\").replace("\"", "\\\"")}\""
-
-val env = readEnvFile()
 
 android {
     namespace = "com.popcorn.live"
@@ -40,15 +16,10 @@ android {
         versionCode = 3
         versionName = "0.1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "XTREAM_BASE_URL", env.requiredEnv("XTREAM_BASE_URL").asBuildConfigString())
-        buildConfigField("String", "XTREAM_USERNAME", env.requiredEnv("XTREAM_USERNAME").asBuildConfigString())
-        buildConfigField("String", "XTREAM_PASSWORD", env.requiredEnv("XTREAM_PASSWORD").asBuildConfigString())
     }
 
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 
     buildTypes {
@@ -61,6 +32,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
@@ -81,6 +56,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.okhttp)
+    implementation(libs.coil.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
     ksp(libs.room.compiler)
